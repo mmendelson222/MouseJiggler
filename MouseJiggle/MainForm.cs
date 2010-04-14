@@ -24,13 +24,13 @@ namespace ArkaneSystems.MouseJiggle
             // jiggle
             if (zig)
             {
-                Jiggler.Jiggle(4, 4);
+                Jiggler32.Jiggle(4, 4);
             }
             else // zag
             {
                 // I really don't know why this needs to be less to stay in the same
                 // place; if I was likely to use it again, then I'd worry.
-                Jiggler.Jiggle(-3, -3);
+                Jiggler32.Jiggle(-3, -3);
             }
 
             zig = !zig;
@@ -46,6 +46,14 @@ namespace ArkaneSystems.MouseJiggle
             using (AboutBox a = new AboutBox())
             {
                 a.ShowDialog();
+            }
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            if (Program.startJiggling)
+            {
+                cbEnabled.Checked = true;
             }
         }
     }

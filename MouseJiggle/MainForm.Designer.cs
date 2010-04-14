@@ -74,6 +74,7 @@ namespace ArkaneSystems.MouseJiggle
             this.MinimizeBox = false;
             this.Name = "MainForm";
             this.Text = "MouseJiggle";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
