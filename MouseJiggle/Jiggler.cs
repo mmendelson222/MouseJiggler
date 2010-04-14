@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -6,18 +6,8 @@ using System.ComponentModel;
 
 namespace ArkaneSystems.MouseJiggle
 {
-    unsafe public static class Jiggler64
+    unsafe public static class Jiggler
     {
-        // FIXME
-
-        public static void Jiggle(int dx, int dy)
-        {
-            // FIXME
-        }
-    }
-}
-
-/*
         [DllImport ("user32.dll", SetLastError=true)]
         private static extern uint SendInput(uint nInputs, ref INPUT pInputs, int cbSize);
 
@@ -27,13 +17,13 @@ namespace ArkaneSystems.MouseJiggle
         public static void Jiggle (int dx, int dy)
         {
             INPUT inp = new INPUT();
-            inp.TYPE = Jiggler32.INPUT_MOUSE;
+            inp.TYPE = Jiggler.INPUT_MOUSE;
             inp.dx = dx;
             inp.dy = dy;
             inp.mouseData = 0;
-            inp.dwFlags = Jiggler32.MOUSEEVENTF_MOVE;
+            inp.dwFlags = Jiggler.MOUSEEVENTF_MOVE;
             inp.time = 0;
-            inp.dwExtraInfo = 0;
+            inp.dwExtraInfo = (IntPtr)0;
 
             if (SendInput(1, ref inp, 28) != 1)
             {
@@ -42,14 +32,16 @@ namespace ArkaneSystems.MouseJiggle
         }
     }
 
-internal struct INPUT
-{
-    public int TYPE;
-    public int dx;
-    public int dy;
-    public int mouseData;
-    public int dwFlags;
-    public int time;
-    public int dwExtraInfo;
+    /* This is a kludge, presetting all this, but WTF. It works.
+     * And for a program this trivial, who's bothered? */
+    internal struct INPUT
+    {
+        public int TYPE;
+        public int dx;
+        public int dy;
+        public int mouseData;
+        public int dwFlags;
+        public int time;
+        public IntPtr dwExtraInfo;
+    }
 }
-*/

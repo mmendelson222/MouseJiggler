@@ -24,13 +24,13 @@ namespace ArkaneSystems.MouseJiggle
             // jiggle
             if (zig)
             {
-                Jiggler32.Jiggle(4, 4);
+                Jiggler.Jiggle(4, 4);
             }
             else // zag
             {
                 // I really don't know why this needs to be less to stay in the same
                 // place; if I was likely to use it again, then I'd worry.
-                Jiggler32.Jiggle(-3, -3);
+                Jiggler.Jiggle(-3, -3);
             }
 
             zig = !zig;
