@@ -7,7 +7,9 @@ using System.Resources;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MouseJiggle")]
-[assembly: AssemblyDescription("A utility to continuously jiggle the mouse pointer to prevent screen saver activation.")]
+[assembly: AssemblyDescription(@"A utility to continuously jiggle the mouse pointer to prevent screen saver activation.
+
+Tick the 'Enable jiggle?' checkbox to begin jiggling the mouse; untick it to stop. The 'Zen jiggle?' checkbox enables a mode in which the pointer is jiggled 'virtually' - the system believes it to be moving and thus screen saver activation, etc., is prevented, but the pointer does not actually move.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Arkane Systems")]
 [assembly: AssemblyProduct("MouseJiggle")]
@@ -33,6 +35,6 @@ using System.Resources;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]

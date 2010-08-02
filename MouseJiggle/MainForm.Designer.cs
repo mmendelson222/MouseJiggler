@@ -33,6 +33,7 @@ namespace ArkaneSystems.MouseJiggle
             this.jiggleTimer = new System.Windows.Forms.Timer(this.components);
             this.cbEnabled = new System.Windows.Forms.CheckBox();
             this.cmdAbout = new System.Windows.Forms.Button();
+            this.cbZenJiggle = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // jiggleTimer
@@ -61,11 +62,23 @@ namespace ArkaneSystems.MouseJiggle
             this.cmdAbout.UseVisualStyleBackColor = true;
             this.cmdAbout.Click += new System.EventHandler(this.cmdAbout_Click);
             // 
+            // cbZenJiggle
+            // 
+            this.cbZenJiggle.AutoSize = true;
+            this.cbZenJiggle.Location = new System.Drawing.Point(25, 36);
+            this.cbZenJiggle.Name = "cbZenJiggle";
+            this.cbZenJiggle.Size = new System.Drawing.Size(78, 17);
+            this.cbZenJiggle.TabIndex = 2;
+            this.cbZenJiggle.Text = "Zen jiggle?";
+            this.cbZenJiggle.UseVisualStyleBackColor = true;
+            this.cbZenJiggle.CheckedChanged += new System.EventHandler(this.cbZenJiggle_CheckedChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(156, 37);
+            this.ClientSize = new System.Drawing.Size(156, 59);
+            this.Controls.Add(this.cbZenJiggle);
             this.Controls.Add(this.cmdAbout);
             this.Controls.Add(this.cbEnabled);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -85,6 +98,7 @@ namespace ArkaneSystems.MouseJiggle
         private System.Windows.Forms.Timer jiggleTimer;
         private System.Windows.Forms.CheckBox cbEnabled;
         private System.Windows.Forms.Button cmdAbout;
+        private System.Windows.Forms.CheckBox cbZenJiggle;
     }
 }
 
