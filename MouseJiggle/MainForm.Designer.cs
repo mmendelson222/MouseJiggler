@@ -34,6 +34,8 @@ namespace ArkaneSystems.MouseJiggle
             this.cbEnabled = new System.Windows.Forms.CheckBox();
             this.cmdAbout = new System.Windows.Forms.Button();
             this.cbZenJiggle = new System.Windows.Forms.CheckBox();
+            this.cmdToTray = new System.Windows.Forms.Button();
+            this.nifMin = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // jiggleTimer
@@ -73,11 +75,28 @@ namespace ArkaneSystems.MouseJiggle
             this.cbZenJiggle.UseVisualStyleBackColor = true;
             this.cbZenJiggle.CheckedChanged += new System.EventHandler(this.cbZenJiggle_CheckedChanged);
             // 
+            // cmdToTray
+            // 
+            this.cmdToTray.Image = ((System.Drawing.Image)(resources.GetObject("cmdToTray.Image")));
+            this.cmdToTray.Location = new System.Drawing.Point(111, 32);
+            this.cmdToTray.Name = "cmdToTray";
+            this.cmdToTray.Size = new System.Drawing.Size(33, 23);
+            this.cmdToTray.TabIndex = 3;
+            this.cmdToTray.UseVisualStyleBackColor = true;
+            this.cmdToTray.Click += new System.EventHandler(this.cmdToTray_Click);
+            // 
+            // nifMin
+            // 
+            this.nifMin.Icon = ((System.Drawing.Icon)(resources.GetObject("nifMin.Icon")));
+            this.nifMin.Text = "Mouse Jiggler";
+            this.nifMin.DoubleClick += new System.EventHandler(this.nifMin_DoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(156, 59);
+            this.Controls.Add(this.cmdToTray);
             this.Controls.Add(this.cbZenJiggle);
             this.Controls.Add(this.cmdAbout);
             this.Controls.Add(this.cbEnabled);
@@ -99,6 +118,8 @@ namespace ArkaneSystems.MouseJiggle
         private System.Windows.Forms.CheckBox cbEnabled;
         private System.Windows.Forms.Button cmdAbout;
         private System.Windows.Forms.CheckBox cbZenJiggle;
+        private System.Windows.Forms.Button cmdToTray;
+        private System.Windows.Forms.NotifyIcon nifMin;
     }
 }
 

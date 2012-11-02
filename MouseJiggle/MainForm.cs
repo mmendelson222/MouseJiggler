@@ -96,5 +96,29 @@ namespace ArkaneSystems.MouseJiggle
                 // Ignore any problems - non-critical operation.
             }
         }
+
+        private void cmdToTray_Click(object sender, EventArgs e)
+        {
+            // minimize to tray
+            this.WindowState = FormWindowState.Minimized;
+
+            // remove from taskbar
+            this.ShowInTaskbar = false;
+
+            // show tray icon
+            nifMin.Visible = true;
+        }
+
+        private void nifMin_DoubleClick(object sender, EventArgs e)
+        {
+            // restore the window
+            this.WindowState = FormWindowState.Normal;
+
+            // replace in taskbar
+            this.ShowInTaskbar = true;
+
+            // hide tray icon
+            nifMin.Visible = false;
+        }
     }
 }
