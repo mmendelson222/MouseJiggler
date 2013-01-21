@@ -6,7 +6,8 @@ namespace ArkaneSystems.MouseJiggle
 {
     static class Program
     {
-        public static bool startJiggling = false;
+        public static bool StartJiggling = false;
+        public static bool ZenJiggling = false;
 
         /// <summary>
         /// The main entry point for the application.
@@ -14,17 +15,16 @@ namespace ArkaneSystems.MouseJiggle
         [STAThread]
         static void Main(string[] args)
         {
-            // Check for command-line switch.
-            if
-                (
-                    (args.Length > 0) &&
-                    (
-                        (args[0].ToLowerInvariant().CompareTo("--jiggle") == 0) ||
-                        (args[0].ToLowerInvariant().CompareTo("-j") == 0)
-                    )
-                )
+            // Check for command-line switches.
+            foreach (string arg in args)
             {
-                startJiggling = true;
+                if ((System.String.Compare(arg.ToUpperInvariant(), "--JIGGLE", System.StringComparison.Ordinal) == 0) ||
+                    (System.String.Compare(arg.ToUpperInvariant(), "-J", System.StringComparison.Ordinal) == 0))
+                    StartJiggling = true;
+
+                if ((System.String.Compare(arg.ToUpperInvariant(), "--ZEN", System.StringComparison.Ordinal) == 0) ||
+                    (System.String.Compare(arg.ToUpperInvariant(), "-Z", System.StringComparison.Ordinal) == 0))
+                    ZenJiggling = true;
             }
 
             Application.EnableVisualStyles();

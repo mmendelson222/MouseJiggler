@@ -75,7 +75,12 @@ namespace ArkaneSystems.MouseJiggle
                 // Ignore any problems - non-critical operation.
             }
 
-            if (Program.startJiggling)
+            if (Program.ZenJiggling)
+            {
+                cbZenJiggle.Checked = true;
+            }
+
+            if (Program.StartJiggling)
             {
                 cbEnabled.Checked = true;
             }
@@ -100,7 +105,7 @@ namespace ArkaneSystems.MouseJiggle
         private void cmdToTray_Click(object sender, EventArgs e)
         {
             // minimize to tray
-            this.WindowState = FormWindowState.Minimized;
+            this.Visible = false;
 
             // remove from taskbar
             this.ShowInTaskbar = false;
@@ -112,7 +117,7 @@ namespace ArkaneSystems.MouseJiggle
         private void nifMin_DoubleClick(object sender, EventArgs e)
         {
             // restore the window
-            this.WindowState = FormWindowState.Normal;
+            this.Visible = true;
 
             // replace in taskbar
             this.ShowInTaskbar = true;
