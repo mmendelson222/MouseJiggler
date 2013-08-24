@@ -1,9 +1,17 @@
+#region header
+
+// MouseJiggle - MainForm.cs
+// 
+// Alistair J. R. Young
+// Arkane Systems
+// 
+// Copyright Arkane Systems 2012-2013.
+// 
+// Created: 2013-08-24 12:41 PM
+
+#endregion
+
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 
 using Microsoft.Win32;
@@ -12,63 +20,58 @@ namespace ArkaneSystems.MouseJiggle
 {
     public partial class MainForm : Form
     {
-        public MainForm()
+        private const int MOUSEMOVE = 8;
+
+        protected bool zig = true;
+
+        public MainForm ()
         {
-            InitializeComponent();
+            this.InitializeComponent ();
         }
 
-        const int MOUSEMOVE = 8 ;
-
-        protected bool zig = true ;
-
-        private void jiggleTimer_Tick(object sender, EventArgs e)
+        private void jiggleTimer_Tick (object sender, EventArgs e)
         {
             // jiggle
-            if (cbZenJiggle.Checked)
-            {
-                Jiggler.Jiggle(0, 0);
-            }
+            if (this.cbZenJiggle.Checked)
+                Jiggler.Jiggle (0, 0);
             else
             {
-                if (zig)
-                {
-                    Jiggler.Jiggle(4, 4);
-                }
+                if (this.zig)
+                    Jiggler.Jiggle (4, 4);
                 else // zag
                 {
                     // I really don't know why this needs to be less to stay in the same
                     // place; if I was likely to use it again, then I'd worry.
-                    Jiggler.Jiggle(-4, -4);
+                    Jiggler.Jiggle (-4, -4);
                 }
             }
 
-            zig = !zig;
+            this.zig = !this.zig;
         }
 
-        private void cbEnabled_CheckedChanged(object sender, EventArgs e)
+        private void cbEnabled_CheckedChanged (object sender, EventArgs e)
         {
-            jiggleTimer.Enabled = cbEnabled.Checked;
+            this.jiggleTimer.Enabled = this.cbEnabled.Checked;
         }
 
-        private void cmdAbout_Click(object sender, EventArgs e)
+        private void cmdAbout_Click (object sender, EventArgs e)
         {
-            using (AboutBox a = new AboutBox())
-            {
-                a.ShowDialog();
-            }
+            using (var a = new AboutBox ())
+                a.ShowDialog ();
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
+        private void MainForm_Load (object sender, EventArgs e)
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey (@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree) ;
-                int zen = (int) key.GetValue("ZenJiggleEnabled", 0);
+                RegistryKey key = Registry.CurrentUser.CreateSubKey (@"Software\Arkane Systems\MouseJiggle",
+                                                                     RegistryKeyPermissionCheck.ReadWriteSubTree);
+                var zen = (int) key.GetValue ("ZenJiggleEnabled", 0);
 
                 if (zen == 0)
-                    cbZenJiggle.Checked = false;
+                    this.cbZenJiggle.Checked = false;
                 else
-                    cbZenJiggle.Checked = true;
+                    this.cbZenJiggle.Checked = true;
             }
             catch (Exception)
             {
@@ -76,25 +79,22 @@ namespace ArkaneSystems.MouseJiggle
             }
 
             if (Program.ZenJiggling)
-            {
-                cbZenJiggle.Checked = true;
-            }
+                this.cbZenJiggle.Checked = true;
 
             if (Program.StartJiggling)
-            {
-                cbEnabled.Checked = true;
-            }
+                this.cbEnabled.Checked = true;
         }
 
-        private void cbZenJiggle_CheckedChanged(object sender, EventArgs e)
+        private void cbZenJiggle_CheckedChanged (object sender, EventArgs e)
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (cbZenJiggle.Checked)
-                    key.SetValue("ZenJiggleEnabled", 1);
+                RegistryKey key = Registry.CurrentUser.CreateSubKey (@"Software\Arkane Systems\MouseJiggle",
+                                                                     RegistryKeyPermissionCheck.ReadWriteSubTree);
+                if (this.cbZenJiggle.Checked)
+                    key.SetValue ("ZenJiggleEnabled", 1);
                 else
-                    key.SetValue("ZenJiggleEnabled", 0);
+                    key.SetValue ("ZenJiggleEnabled", 0);
             }
             catch (Exception)
             {
@@ -102,7 +102,7 @@ namespace ArkaneSystems.MouseJiggle
             }
         }
 
-        private void cmdToTray_Click(object sender, EventArgs e)
+        private void cmdToTray_Click (object sender, EventArgs e)
         {
             // minimize to tray
             this.Visible = false;
@@ -111,10 +111,10 @@ namespace ArkaneSystems.MouseJiggle
             this.ShowInTaskbar = false;
 
             // show tray icon
-            nifMin.Visible = true;
+            this.nifMin.Visible = true;
         }
 
-        private void nifMin_DoubleClick(object sender, EventArgs e)
+        private void nifMin_DoubleClick (object sender, EventArgs e)
         {
             // restore the window
             this.Visible = true;
@@ -123,7 +123,7 @@ namespace ArkaneSystems.MouseJiggle
             this.ShowInTaskbar = true;
 
             // hide tray icon
-            nifMin.Visible = false;
+            this.nifMin.Visible = false;
         }
     }
 }
