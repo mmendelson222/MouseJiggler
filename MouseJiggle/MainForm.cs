@@ -83,6 +83,9 @@ namespace ArkaneSystems.MouseJiggle
 
             if (Program.StartJiggling)
                 this.cbEnabled.Checked = true;
+
+            if (Program.StartMinimized)
+                this.cmdToTray_Click(this, null);
         }
 
         private void cbZenJiggle_CheckedChanged (object sender, EventArgs e)

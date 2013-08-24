@@ -20,6 +20,7 @@ namespace ArkaneSystems.MouseJiggle
     {
         public static bool StartJiggling = false;
         public static bool ZenJiggling = false;
+        public static bool StartMinimized = false;
 
         /// <summary>
         ///     The main entry point for the application.
@@ -37,6 +38,10 @@ namespace ArkaneSystems.MouseJiggle
                 if ((System.String.Compare (arg.ToUpperInvariant (), "--ZEN", System.StringComparison.Ordinal) == 0) ||
                     (System.String.Compare (arg.ToUpperInvariant (), "-Z", System.StringComparison.Ordinal) == 0))
                     ZenJiggling = true;
+
+                if ((System.String.Compare (arg.ToUpperInvariant (), "--MINIMIZED", System.StringComparison.Ordinal) == 0) ||
+                    (System.String.Compare (arg.ToUpperInvariant (), "-M", System.StringComparison.Ordinal) == 0))
+                    StartMinimized = true;
             }
 
             Application.EnableVisualStyles ();
