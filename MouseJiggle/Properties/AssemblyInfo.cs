@@ -13,7 +13,7 @@ Tick the 'Enable jiggle?' checkbox to begin jiggling the mouse; untick it to sto
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Arkane Systems")]
 [assembly: AssemblyProduct("MouseJiggle")]
-[assembly: AssemblyCopyright("Copyright © Alistair J. R. Young 2007-2012")]
+[assembly: AssemblyCopyright ("Copyright © Alistair J. R. Young 2007-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,6 +35,6 @@ Tick the 'Enable jiggle?' checkbox to begin jiggling the mouse; untick it to sto
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.0.0")]
-[assembly: AssemblyFileVersion("1.3.0.0")]
+[assembly: AssemblyVersion ("1.5.0.0")]
+[assembly: AssemblyFileVersion ("1.5.0.0")]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
