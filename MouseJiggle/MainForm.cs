@@ -13,65 +13,64 @@
 
 using System;
 using System.Windows.Forms;
-
+using Gma.System.MouseKeyHook;
 using Microsoft.Win32;
 
 namespace ArkaneSystems.MouseJiggle
 {
+
     public partial class MainForm : Form
     {
-        private const int MOUSEMOVE = 8;
+        //don't move mouse if we've been using it in the last MIN_IDLE_TIME_SECONDS
+        int MIN_IDLE_TIME_SECONDS = 30;
 
-        protected bool zig = true;
-
-        public MainForm ()
+        public MainForm()
         {
-            this.InitializeComponent ();
+            this.InitializeComponent();
+
+            IKeyboardMouseEvents events = Hook.GlobalEvents();
+            events.MouseMove += mouseActivityevent;
+            events.MouseUp += mouseActivityevent;
         }
 
-        private void jiggleTimer_Tick (object sender, EventArgs e)
+
+        DateTime lastMovement = DateTime.Now;
+        private void mouseActivityevent(object sender, MouseEventArgs e)
         {
+            Log.Debug("MouseMoved");
+            lastMovement = DateTime.Now;
+        }
+
+        private void jiggleTimer_Tick(object sender, EventArgs e)
+        {
+            if ((DateTime.Now - lastMovement).Seconds < MIN_IDLE_TIME_SECONDS)
+                return;
+            
             // jiggle
-            if (this.cbZenJiggle.Checked)
-                Jiggler.Jiggle (0, 0);
+            if (this.radZen.Checked)
+            {
+                Log.Debug("Zening");
+                Jiggler.Jiggle(0, 0);
+            }
             else
             {
-                if (this.zig)
-                    Jiggler.Jiggle (4, 4);
-                else // zag
-                {
-                    // I really don't know why this needs to be less to stay in the same
-                    // place; if I was likely to use it again, then I'd worry.
-                    Jiggler.Jiggle (-4, -4);
-                }
+                Log.Debug("Jiggling");
+                Jiggler.Jiggle(4, 4);
+                System.Threading.Thread.Sleep(10);
+                Jiggler.Jiggle(-4, -4);
             }
-
-            this.zig = !this.zig;
         }
 
-        private void cbEnabled_CheckedChanged (object sender, EventArgs e)
-        {
-            this.jiggleTimer.Enabled = this.cbEnabled.Checked;
-        }
-
-        private void cmdAbout_Click (object sender, EventArgs e)
-        {
-            using (var a = new AboutBox ())
-                a.ShowDialog ();
-        }
-
-        private void MainForm_Load (object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey (@"Software\Arkane Systems\MouseJiggle",
-                                                                     RegistryKeyPermissionCheck.ReadWriteSubTree);
-                var zen = (int) key.GetValue ("ZenJiggleEnabled", 0);
-
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                var zen = (int)key.GetValue("ZenJiggleEnabled", 0);
                 if (zen == 0)
-                    this.cbZenJiggle.Checked = false;
+                    this.radZen.Checked = true;
                 else
-                    this.cbZenJiggle.Checked = true;
+                    this.radOn.Checked = true;
             }
             catch (Exception)
             {
@@ -79,54 +78,61 @@ namespace ArkaneSystems.MouseJiggle
             }
 
             if (Program.ZenJiggling)
-                this.cbZenJiggle.Checked = true;
-
-            if (Program.StartJiggling)
-                this.cbEnabled.Checked = true;
-
-            if (Program.StartMinimized)
+                this.radZen.Checked = true;
+            else if (Program.StartJiggling)
+                this.radOn.Checked = true;
+            else if (Program.StartMinimized)
                 this.cmdToTray_Click(this, null);
         }
 
-        private void cbZenJiggle_CheckedChanged (object sender, EventArgs e)
+
+        private void cmdToTray_Click(object sender, EventArgs e)
+        {
+            // minimize to tray
+            this.Visible = false;
+            // remove from taskbar
+            this.ShowInTaskbar = false;
+            // show tray icon
+            this.trayIcon.Visible = true;
+        }
+
+        private void nifMin_DoubleClick(object sender, EventArgs e)
+        {
+            // restore the window
+            this.Visible = true;
+            // replace in taskbar
+            this.ShowInTaskbar = true;
+            // hide tray icon
+            this.trayIcon.Visible = false;
+        }
+
+        private void checkedChanged(object sender, EventArgs e)
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey (@"Software\Arkane Systems\MouseJiggle",
-                                                                     RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (this.cbZenJiggle.Checked)
-                    key.SetValue ("ZenJiggleEnabled", 1);
+                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                if (this.radZen.Checked)
+                    key.SetValue("ZenJiggleEnabled", 1);
                 else
-                    key.SetValue ("ZenJiggleEnabled", 0);
+                    key.SetValue("ZenJiggleEnabled", 0);
             }
             catch (Exception)
             {
                 // Ignore any problems - non-critical operation.
             }
+
+            this.jiggleTimer.Enabled = !this.radOff.Checked;
         }
 
-        private void cmdToTray_Click (object sender, EventArgs e)
+        private void item_Click(object sender, EventArgs e)
         {
-            // minimize to tray
-            this.Visible = false;
+            if (!(sender is ToolStripMenuItem)) return;
+            ToolStripMenuItem senderItem = (ToolStripMenuItem)sender;
 
-            // remove from taskbar
-            this.ShowInTaskbar = false;
-
-            // show tray icon
-            this.nifMin.Visible = true;
-        }
-
-        private void nifMin_DoubleClick (object sender, EventArgs e)
-        {
-            // restore the window
-            this.Visible = true;
-
-            // replace in taskbar
-            this.ShowInTaskbar = true;
-
-            // hide tray icon
-            this.nifMin.Visible = false;
+            if (senderItem == this.itemExit)
+            {
+                Application.Exit();
+            }
         }
     }
 }
