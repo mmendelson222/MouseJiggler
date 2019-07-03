@@ -22,7 +22,14 @@ namespace ArkaneSystems.MouseJiggle
     public partial class MainForm : Form
     {
         //don't move mouse if we've been using it in the last MIN_IDLE_TIME_SECONDS
-        int MIN_IDLE_TIME_SECONDS = 30;
+        int MIN_IDLE_TIME_SECONDS = 5;
+        //only jiggle for this long.  Then stop jiggling.  0 is "no timeout"
+        const int JIGGLE_TIMEOUT_DEFAULT_MINUTES = 0;
+
+        RegistryKey reg;
+        const string ZEN_KEY = "Zen";
+        const string TIMEOUT_KEY = "Timeout";
+        const string ENABLED_KEY = "Enabled";
 
         public MainForm()
         {
@@ -33,6 +40,11 @@ namespace ArkaneSystems.MouseJiggle
             events.MouseUp += mouseActivityevent;
         }
 
+        private RegistryKey GetKey(string name)
+        {
+            string keyName = @"Software\Arkane Systems\" + name;
+            return Registry.CurrentUser.CreateSubKey(keyName, RegistryKeyPermissionCheck.ReadWriteSubTree);
+        }
 
         DateTime lastMovement = DateTime.Now;
         private void mouseActivityevent(object sender, MouseEventArgs e)
@@ -45,11 +57,11 @@ namespace ArkaneSystems.MouseJiggle
         {
             if ((DateTime.Now - lastMovement).Seconds < MIN_IDLE_TIME_SECONDS)
                 return;
-            
+
             // jiggle
-            if (this.radZen.Checked)
+            if (this.chkZen.Checked)
             {
-                Log.Debug("Zening");
+                Log.Debug("Zen");
                 Jiggler.Jiggle(0, 0);
             }
             else
@@ -65,12 +77,10 @@ namespace ArkaneSystems.MouseJiggle
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
-                var zen = (int)key.GetValue("ZenJiggleEnabled", 0);
-                if (zen == 0)
-                    this.radZen.Checked = true;
-                else
-                    this.radOn.Checked = true;
+                reg = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
+                this.chkZen.Checked = (int)reg.GetValue(ZEN_KEY, 0) == 0;
+                this.chkEnabled.Checked = (int)reg.GetValue(ENABLED_KEY, 0) == 0;
+                this.timeoutMinutes.Value = (int)reg.GetValue(TIMEOUT_KEY, JIGGLE_TIMEOUT_DEFAULT_MINUTES);
             }
             catch (Exception)
             {
@@ -78,9 +88,9 @@ namespace ArkaneSystems.MouseJiggle
             }
 
             if (Program.ZenJiggling)
-                this.radZen.Checked = true;
+                this.chkZen.Checked = true;
             else if (Program.StartJiggling)
-                this.radOn.Checked = true;
+                this.chkEnabled.Checked = true;
             else if (Program.StartMinimized)
                 this.cmdToTray_Click(this, null);
         }
@@ -110,18 +120,15 @@ namespace ArkaneSystems.MouseJiggle
         {
             try
             {
-                RegistryKey key = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
-                if (this.radZen.Checked)
-                    key.SetValue("ZenJiggleEnabled", 1);
-                else
-                    key.SetValue("ZenJiggleEnabled", 0);
+                reg.SetValue(ZEN_KEY, chkZen.Checked ? 1 : 0);
+                reg.SetValue(ENABLED_KEY, chkEnabled.Checked ? 1 : 0);
             }
             catch (Exception)
             {
                 // Ignore any problems - non-critical operation.
             }
 
-            this.jiggleTimer.Enabled = !this.radOff.Checked;
+            this.jiggleTimer.Enabled = this.chkEnabled.Checked;
         }
 
         private void item_Click(object sender, EventArgs e)
@@ -133,6 +140,12 @@ namespace ArkaneSystems.MouseJiggle
             {
                 Application.Exit();
             }
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            int val = (int)((NumericUpDown)sender).Value;
+            reg.SetValue(TIMEOUT_KEY, val);
         }
     }
 }

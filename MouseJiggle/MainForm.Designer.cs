@@ -31,30 +31,22 @@ namespace ArkaneSystems.MouseJiggle
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.jiggleTimer = new System.Windows.Forms.Timer(this.components);
-            this.cmdToTray = new System.Windows.Forms.Button();
             this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.ctxMenuTray = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.itemExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.radOn = new System.Windows.Forms.RadioButton();
-            this.radZen = new System.Windows.Forms.RadioButton();
-            this.radOff = new System.Windows.Forms.RadioButton();
+            this.timeoutMinutes = new System.Windows.Forms.NumericUpDown();
+            this.chkEnabled = new System.Windows.Forms.CheckBox();
+            this.chkZen = new System.Windows.Forms.CheckBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.lblTimeoutMinutes = new System.Windows.Forms.Label();
             this.ctxMenuTray.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timeoutMinutes)).BeginInit();
             this.SuspendLayout();
             // 
             // jiggleTimer
             // 
             this.jiggleTimer.Interval = 1000;
             this.jiggleTimer.Tick += new System.EventHandler(this.jiggleTimer_Tick);
-            // 
-            // cmdToTray
-            // 
-            this.cmdToTray.Image = ((System.Drawing.Image)(resources.GetObject("cmdToTray.Image")));
-            this.cmdToTray.Location = new System.Drawing.Point(111, 32);
-            this.cmdToTray.Name = "cmdToTray";
-            this.cmdToTray.Size = new System.Drawing.Size(33, 23);
-            this.cmdToTray.TabIndex = 3;
-            this.cmdToTray.UseVisualStyleBackColor = true;
-            this.cmdToTray.Click += new System.EventHandler(this.cmdToTray_Click);
             // 
             // trayIcon
             // 
@@ -77,61 +69,81 @@ namespace ArkaneSystems.MouseJiggle
             this.itemExit.Text = "E&xit";
             this.itemExit.Click += new System.EventHandler(this.item_Click);
             // 
-            // radOn
+            // timeoutMinutes
             // 
-            this.radOn.AutoSize = true;
-            this.radOn.Location = new System.Drawing.Point(3, 1);
-            this.radOn.Name = "radOn";
-            this.radOn.Size = new System.Drawing.Size(39, 17);
-            this.radOn.TabIndex = 4;
-            this.radOn.TabStop = true;
-            this.radOn.Text = "On";
-            this.radOn.UseVisualStyleBackColor = true;
-            this.radOn.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            this.timeoutMinutes.Location = new System.Drawing.Point(21, 53);
+            this.timeoutMinutes.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.timeoutMinutes.Name = "timeoutMinutes";
+            this.timeoutMinutes.Size = new System.Drawing.Size(45, 20);
+            this.timeoutMinutes.TabIndex = 7;
+            this.timeoutMinutes.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
             // 
-            // radZen
+            // chkEnabled
             // 
-            this.radZen.AutoSize = true;
-            this.radZen.Location = new System.Drawing.Point(3, 21);
-            this.radZen.Name = "radZen";
-            this.radZen.Size = new System.Drawing.Size(44, 17);
-            this.radZen.TabIndex = 5;
-            this.radZen.TabStop = true;
-            this.radZen.Text = "Zen";
-            this.radZen.UseVisualStyleBackColor = true;
-            this.radZen.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            this.chkEnabled.AutoSize = true;
+            this.chkEnabled.Location = new System.Drawing.Point(21, 6);
+            this.chkEnabled.Name = "chkEnabled";
+            this.chkEnabled.Size = new System.Drawing.Size(65, 17);
+            this.chkEnabled.TabIndex = 8;
+            this.chkEnabled.Text = "Enabled";
+            this.chkEnabled.UseVisualStyleBackColor = true;
+            this.chkEnabled.CheckedChanged += new System.EventHandler(this.checkedChanged);
             // 
-            // radOff
+            // chkZen
             // 
-            this.radOff.AutoSize = true;
-            this.radOff.Location = new System.Drawing.Point(3, 40);
-            this.radOff.Name = "radOff";
-            this.radOff.Size = new System.Drawing.Size(39, 17);
-            this.radOff.TabIndex = 6;
-            this.radOff.TabStop = true;
-            this.radOff.Text = "Off";
-            this.radOff.UseVisualStyleBackColor = true;
-            this.radOff.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            this.chkZen.AutoSize = true;
+            this.chkZen.Location = new System.Drawing.Point(21, 30);
+            this.chkZen.Name = "chkZen";
+            this.chkZen.Size = new System.Drawing.Size(45, 17);
+            this.chkZen.TabIndex = 9;
+            this.chkZen.Text = "Zen";
+            this.chkZen.UseVisualStyleBackColor = true;
+            this.chkZen.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(20, 86);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "taskbar";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.cmdToTray_Click);
+            // 
+            // lblTimeoutMinutes
+            // 
+            this.lblTimeoutMinutes.AutoSize = true;
+            this.lblTimeoutMinutes.Location = new System.Drawing.Point(72, 55);
+            this.lblTimeoutMinutes.Name = "lblTimeoutMinutes";
+            this.lblTimeoutMinutes.Size = new System.Drawing.Size(64, 13);
+            this.lblTimeoutMinutes.TabIndex = 11;
+            this.lblTimeoutMinutes.Text = "Timout (min)";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(156, 59);
-            this.Controls.Add(this.radOff);
-            this.Controls.Add(this.radZen);
-            this.Controls.Add(this.radOn);
-            this.Controls.Add(this.cmdToTray);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.ClientSize = new System.Drawing.Size(156, 134);
+            this.Controls.Add(this.lblTimeoutMinutes);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.chkZen);
+            this.Controls.Add(this.chkEnabled);
+            this.Controls.Add(this.timeoutMinutes);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(172, 98);
-            this.MinimumSize = new System.Drawing.Size(172, 98);
+            this.MaximumSize = new System.Drawing.Size(172, 173);
+            this.MinimumSize = new System.Drawing.Size(172, 173);
             this.Name = "MainForm";
             this.Text = "MouseJiggle";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ctxMenuTray.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.timeoutMinutes)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -140,13 +152,14 @@ namespace ArkaneSystems.MouseJiggle
         #endregion
 
         private System.Windows.Forms.Timer jiggleTimer;
-        private System.Windows.Forms.Button cmdToTray;
         private System.Windows.Forms.NotifyIcon trayIcon;
-        private System.Windows.Forms.RadioButton radOn;
-        private System.Windows.Forms.RadioButton radZen;
-        private System.Windows.Forms.RadioButton radOff;
         private System.Windows.Forms.ContextMenuStrip ctxMenuTray;
         private System.Windows.Forms.ToolStripMenuItem itemExit;
+        private System.Windows.Forms.NumericUpDown timeoutMinutes;
+        private System.Windows.Forms.CheckBox chkEnabled;
+        private System.Windows.Forms.CheckBox chkZen;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label lblTimeoutMinutes;
     }
 }
 
