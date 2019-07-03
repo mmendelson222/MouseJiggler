@@ -55,9 +55,14 @@ namespace ArkaneSystems.MouseJiggle
 
         private void jiggleTimer_Tick(object sender, EventArgs e)
         {
+            //don't jiggle if the mouse has moved lately. 
             if ((DateTime.Now - lastMovement).Seconds < MIN_IDLE_TIME_SECONDS)
                 return;
-
+            Log.Debug((DateTime.Now - lastMovement).Minutes.ToString() + " " + TimeoutMinutes.ToString());
+            //don't jiggle if we're over the timeout limit. 
+            if ((DateTime.Now - lastMovement).Minutes >= TimeoutMinutes)
+                return;
+                
             // jiggle
             if (this.chkZen.Checked)
             {
@@ -142,10 +147,17 @@ namespace ArkaneSystems.MouseJiggle
             }
         }
 
+        private int TimeoutMinutes
+        {
+            get
+            {
+                return (int)this.timeoutMinutes.Value;
+            }
+        }
+
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            int val = (int)((NumericUpDown)sender).Value;
-            reg.SetValue(TIMEOUT_KEY, val);
+            reg.SetValue(TIMEOUT_KEY, TimeoutMinutes);
         }
     }
 }
