@@ -91,7 +91,7 @@ namespace ArkaneSystems.MouseJiggle
             this.chkEnabled.TabIndex = 8;
             this.chkEnabled.Text = "Enabled";
             this.chkEnabled.UseVisualStyleBackColor = true;
-            this.chkEnabled.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            this.chkEnabled.CheckedChanged += new System.EventHandler(this.enabledCheckedChanged);
             // 
             // chkZen
             // 
@@ -102,7 +102,7 @@ namespace ArkaneSystems.MouseJiggle
             this.chkZen.TabIndex = 9;
             this.chkZen.Text = "Zen";
             this.chkZen.UseVisualStyleBackColor = true;
-            this.chkZen.CheckedChanged += new System.EventHandler(this.checkedChanged);
+            this.chkZen.CheckedChanged += new System.EventHandler(this.zenCheckedChanged);
             // 
             // button1
             // 

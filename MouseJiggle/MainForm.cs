@@ -22,7 +22,7 @@ namespace ArkaneSystems.MouseJiggle
     public partial class MainForm : Form
     {
         //don't move mouse if we've been using it in the last MIN_IDLE_TIME_SECONDS
-        int MIN_IDLE_TIME_SECONDS = 5;
+        int MIN_IDLE_TIME_SECONDS = 15;
         //only jiggle for this long.  Then stop jiggling.  0 is "no timeout"
         const int JIGGLE_TIMEOUT_DEFAULT_MINUTES = 0;
 
@@ -56,13 +56,23 @@ namespace ArkaneSystems.MouseJiggle
         private void jiggleTimer_Tick(object sender, EventArgs e)
         {
             //don't jiggle if the mouse has moved lately. 
-            if ((DateTime.Now - lastMovement).Seconds < MIN_IDLE_TIME_SECONDS)
+            if ((DateTime.Now - lastMovement).TotalSeconds < MIN_IDLE_TIME_SECONDS)
+            {
+                Log.Debug("mouse movement wait period");
                 return;
-            Log.Debug((DateTime.Now - lastMovement).Minutes.ToString() + " " + TimeoutMinutes.ToString());
-            //don't jiggle if we're over the timeout limit. 
-            if ((DateTime.Now - lastMovement).Minutes >= TimeoutMinutes)
-                return;
-                
+            }
+
+            Log.Debug((DateTime.Now - lastMovement).TotalMinutes.ToString() + " " + TimeoutMinutes.ToString());
+            //don't jiggle if we're over the timeout limit.   0 means we're not using timeout
+            if (TimeoutMinutes > 0)
+            {
+                if ((DateTime.Now - lastMovement).TotalMinutes >= TimeoutMinutes)
+                {
+                    Log.Debug("time limit exceeded");
+                    return;
+                }
+            }
+
             // jiggle
             if (this.chkZen.Checked)
             {
@@ -77,14 +87,13 @@ namespace ArkaneSystems.MouseJiggle
                 Jiggler.Jiggle(-4, -4);
             }
         }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
             try
             {
                 reg = Registry.CurrentUser.CreateSubKey(@"Software\Arkane Systems\MouseJiggle", RegistryKeyPermissionCheck.ReadWriteSubTree);
-                this.chkZen.Checked = (int)reg.GetValue(ZEN_KEY, 0) == 0;
-                this.chkEnabled.Checked = (int)reg.GetValue(ENABLED_KEY, 0) == 0;
+                this.chkZen.Checked = (int)reg.GetValue(ZEN_KEY, 0) == 1;
+                this.chkEnabled.Checked = (int)reg.GetValue(ENABLED_KEY, 0) == 1;
                 this.timeoutMinutes.Value = (int)reg.GetValue(TIMEOUT_KEY, JIGGLE_TIMEOUT_DEFAULT_MINUTES);
             }
             catch (Exception)
@@ -121,21 +130,6 @@ namespace ArkaneSystems.MouseJiggle
             this.trayIcon.Visible = false;
         }
 
-        private void checkedChanged(object sender, EventArgs e)
-        {
-            try
-            {
-                reg.SetValue(ZEN_KEY, chkZen.Checked ? 1 : 0);
-                reg.SetValue(ENABLED_KEY, chkEnabled.Checked ? 1 : 0);
-            }
-            catch (Exception)
-            {
-                // Ignore any problems - non-critical operation.
-            }
-
-            this.jiggleTimer.Enabled = this.chkEnabled.Checked;
-        }
-
         private void item_Click(object sender, EventArgs e)
         {
             if (!(sender is ToolStripMenuItem)) return;
@@ -158,6 +152,17 @@ namespace ArkaneSystems.MouseJiggle
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             reg.SetValue(TIMEOUT_KEY, TimeoutMinutes);
+        }
+
+        private void zenCheckedChanged(object sender, EventArgs e)
+        {
+            reg.SetValue(ZEN_KEY, chkZen.Checked ? 1 : 0);
+        }
+
+        private void enabledCheckedChanged(object sender, EventArgs e)
+        {
+            reg.SetValue(ENABLED_KEY, chkEnabled.Checked ? 1 : 0);
+            this.jiggleTimer.Enabled = this.chkEnabled.Checked;
         }
     }
 }
