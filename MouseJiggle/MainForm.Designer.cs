@@ -53,7 +53,8 @@ namespace ArkaneSystems.MouseJiggle
             this.trayIcon.ContextMenuStrip = this.ctxMenuTray;
             this.trayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("trayIcon.Icon")));
             this.trayIcon.Text = "Mouse Jiggler";
-            this.trayIcon.DoubleClick += new System.EventHandler(this.nifMin_DoubleClick);
+            this.trayIcon.DoubleClick += new System.EventHandler(this.desktopicon_doubleclick);
+            this.trayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.desktopIcon_click);
             // 
             // ctxMenuTray
             // 

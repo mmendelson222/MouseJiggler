@@ -49,7 +49,7 @@ namespace ArkaneSystems.MouseJiggle
         DateTime lastMovement = DateTime.Now;
         private void mouseActivityevent(object sender, MouseEventArgs e)
         {
-            Log.Debug("MouseMoved");
+            //Log.Debug("MouseMoved");
             lastMovement = DateTime.Now;
         }
 
@@ -73,18 +73,27 @@ namespace ArkaneSystems.MouseJiggle
                 }
             }
 
-            // jiggle
-            if (this.chkZen.Checked)
+            try
             {
-                Log.Debug("Zen");
-                Jiggler.Jiggle(0, 0);
+                // jiggle
+                if (this.chkZen.Checked)
+                {
+                    Log.Debug("Zen");
+                    Jiggler.Jiggle(0, 0);
+                }
+                else
+                {
+                    Log.Debug("Jiggling");
+                    Jiggler.Jiggle(4, 4);
+                    System.Threading.Thread.Sleep(10);
+                    Jiggler.Jiggle(-4, -4);
+                }
             }
-            else
+            catch (Exception)
             {
-                Log.Debug("Jiggling");
-                Jiggler.Jiggle(4, 4);
-                System.Threading.Thread.Sleep(10);
-                Jiggler.Jiggle(-4, -4);
+                //authorization exception might occur;  unusre why. 
+                //Log.Debug(ex.Message);
+                //Log.Debug(ex.StackTrace);
             }
         }
         private void MainForm_Load(object sender, EventArgs e)
@@ -113,21 +122,25 @@ namespace ArkaneSystems.MouseJiggle
         private void cmdToTray_Click(object sender, EventArgs e)
         {
             // minimize to tray
-            this.Visible = false;
-            // remove from taskbar
             this.ShowInTaskbar = false;
-            // show tray icon
             this.trayIcon.Visible = true;
+            Hide();
         }
 
-        private void nifMin_DoubleClick(object sender, EventArgs e)
+        private void desktopIcon_click(object sender, MouseEventArgs e)
+        {
+            show();
+        }
+        private void desktopicon_doubleclick(object sender, EventArgs e)
+        {
+            show();
+        }
+        private void show()
         {
             // restore the window
-            this.Visible = true;
-            // replace in taskbar
             this.ShowInTaskbar = true;
-            // hide tray icon
             this.trayIcon.Visible = false;
+            Show();
         }
 
         private void item_Click(object sender, EventArgs e)
@@ -164,5 +177,6 @@ namespace ArkaneSystems.MouseJiggle
             reg.SetValue(ENABLED_KEY, chkEnabled.Checked ? 1 : 0);
             this.jiggleTimer.Enabled = this.chkEnabled.Checked;
         }
+
     }
 }
